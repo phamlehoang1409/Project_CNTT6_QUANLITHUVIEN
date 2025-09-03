@@ -57,7 +57,14 @@ void addBook() {
     printf("Nhap gia: ");
     scanf("%d", &b.price);
     printf("Nhap ngay xuat ban (dd mm yyyy): ");
-    scanf("%d %d %d", &b.publication.day, &b.publication.month, &b.publication.year);
+    if (scanf("%d %d %d", &b.publication.day, &b.publication.month, &b.publication.year) != 3 ||
+         b.publication.day < 1 || b.publication.day > 31 ||
+         b.publication.month < 1 || b.publication.month > 12 ||
+         b.publication.year < 0) {
+        printf("Ngay xuat ban khong hop le\n");
+        getchar();
+        return;
+         }
     getchar();
 
     books[bookCount++] = b;
@@ -65,13 +72,24 @@ void addBook() {
 }
 
 void listBooks() {
-    if (bookCount == 0) {
-        printf("Chua co sach\n");
-        return;
-    }
-    for (int i=0; i<bookCount; i++) {
-        printBook(books[i]);
-    }
+        if (bookCount == 0) {
+            printf("Chua co sach\n");
+            return;
+        }
+
+        printf("\n+----------------------------------------------------------------------------------------------\n");
+        printf("| %-8s | %-28s | %-18s | %-8s | %-6s | %-12s |\n",
+               "ID", "Ten sach", "Tac gia", "So luong", "Gia", "Xuat ban");
+        printf("+--------------------------------------------------------------------------------------------\n");
+
+        for (int i = 0; i < bookCount; i++) {
+            printf("| %-8s | %-28s | %-18s | %-8d | %-6d | %02d/%02d/%-4d |\n",
+                   books[i].bookId, books[i].title, books[i].author,
+                   books[i].quantity, books[i].price,
+                   books[i].publication.day, books[i].publication.month, books[i].publication.year);
+        }
+
+        printf("----------------------------------------------------------------------------------------------\n");
 }
 
 void deleteBook() {
